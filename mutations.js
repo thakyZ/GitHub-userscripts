@@ -50,7 +50,7 @@
 				name: "menu"
 			},
 			// loading of files in gist
-			".js-gist-file-update-container"": {
+			".js-gist-file-update-container": {
 				count: 0,
 				name: "gist"
 			}
