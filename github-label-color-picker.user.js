@@ -1,19 +1,19 @@
 // ==UserScript==
 // @name        GitHub Label Color Picker
-// @version     1.0.8
+// @version     1.0.9
 // @description A userscript that adds a color picker to the label color input
 // @license     MIT
 // @author      Rob Garrison
 // @contributor darkred
 // @namespace   https://github.com/Mottie
-// @include     https://github.com/*
+// @match       https://github.com/*
 // @run-at      document-idle
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_registerMenuCommand
 // @require     https://greasyfork.org/scripts/23181-colorpicker/code/colorPicker.js?version=147862
-// @require     https://greasyfork.org/scripts/398877-utils-js/code/utilsjs.js?version=952600
+// @require     https://greasyfork.org/scripts/398877-utils-js/code/utilsjs.js?version=1079637
 // @icon        https://github.githubassets.com/pinned-octocat.svg
 // @updateURL   https://raw.githubusercontent.com/Mottie/GitHub-userscripts/master/github-label-color-picker.user.js
 // @downloadURL https://raw.githubusercontent.com/Mottie/GitHub-userscripts/master/github-label-color-picker.user.js

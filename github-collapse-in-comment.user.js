@@ -1,18 +1,18 @@
 // ==UserScript==
 // @name        GitHub Collapse In Comment
-// @version     1.0.22
+// @version     1.0.23
 // @description A userscript that adds a header that can toggle long code and quote blocks in comments
 // @license     MIT
 // @author      Rob Garrison
 // @namespace   https://github.com/Mottie
-// @include     https://github.com/*
-// @include     https://gist.github.com/*
+// @match       https://github.com/*
+// @match       https://gist.github.com/*
 // @run-at      document-idle
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @grant       GM_registerMenuCommand
-// @require     https://greasyfork.org/scripts/28721-mutations/code/mutations.js?version=952601
+// @require     https://greasyfork.org/scripts/28721-mutations/code/mutations.js?version=1108163
 // @icon        https://github.githubassets.com/pinned-octocat.svg
 // @updateURL   https://raw.githubusercontent.com/Mottie/GitHub-userscripts/master/github-collapse-in-comment.user.js
 // @downloadURL https://raw.githubusercontent.com/Mottie/GitHub-userscripts/master/github-collapse-in-comment.user.js

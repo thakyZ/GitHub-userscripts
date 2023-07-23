@@ -1,23 +1,25 @@
 // ==UserScript==
 // @name        GitHub Custom Navigation
-// @version     1.1.10
+// @version     1.1.11
 // @description A userscript that allows you to customize GitHub's main navigation bar
 // @license     MIT
 // @author      Rob Garrison
 // @namespace   https://github.com/Mottie
-// @include     https://github.com/*
-// @include     https://gist.github.com/*
+// @match       https://github.com/*
+// @match       https://gist.github.com/*
 // @run-at      document-end
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
 // @icon        https://github.githubassets.com/pinned-octocat.svg
 // @require     https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.js
+// @require     https://greasyfork.org/scripts/28721-mutations/code/mutations.js?version=1108163
+// @require     https://greasyfork.org/scripts/398877-utils-js/code/utilsjs.js?version=1079637
 // @updateURL   https://raw.githubusercontent.com/Mottie/Github-userscripts/master/github-custom-navigation.user.js
 // @downloadURL https://raw.githubusercontent.com/Mottie/Github-userscripts/master/github-custom-navigation.user.js
 // @supportURL  https://github.com/Mottie/GitHub-userscripts/issues
 // ==/UserScript==
-/* global dragula */
+/* global dragula $ $$ addClass removeClass on */
 (() => {
 	"use strict";
 
@@ -545,8 +547,8 @@
 			attr: {
 				"data-ghcn": name
 			},
-			cl4ss: "Header-item",
-			html: html
+			className: "Header-item",
+			html
 		});
 	}
 
@@ -664,32 +666,31 @@
 
 	function addBindings() {
 		// Create a menu entry
-		let el,
-			menu = make({
-				el: "a",
-				cl4ss: "dropdown-item",
-				html: "Custom Nav Settings",
-				attr: {
-					id: "ghcn-menu"
-				}
-			});
+		const menu = make({
+			el: "a",
+			className: "dropdown-item",
+			html: "Custom Nav Settings",
+			attr: {
+				id: "ghcn-menu"
+			}
+		});
 
-		el = $$(`
+		const els = $$(`
 			.Header .dropdown-item[href='/settings/profile'],
 			.Header .dropdown-item[data-ga-click*='go to profile'],
+			.Header-item .dropdown-item[href='/settings/profile'],
 			.js-header-wrapper .dropdown-item[href='/settings/profile'],
 			.js-header-wrapper .dropdown-item[data-ga-click*='go to profile']`
 		);
 		// get last found item - gists only have the "go to profile" item; GitHub
 		// has both
-		el = el[el.length - 1];
-		if (el) {
-			// insert after
-			el.parentNode.insertBefore(menu, el.nextSibling);
+		if (els.length) {
+			els[els.length -1].after(menu);
 			on($("#ghcn-menu"), "click", openPanel);
 		}
 
 		on(window, "hashchange", openPanelOnHash);
+		on(document, "ghmo:container", customize);
 		on($("#ghcn-overlay"), "click", event => {
 			// ignore bubbled up events
 			if (event.target.id === "ghcn-overlay") {
@@ -784,7 +785,7 @@
 
 	// Main process - adds links to header navigation
 	function customize() {
-		let nav = $(".Header nav");
+		let nav = $("nav[aria-label='Global']");
 		if (nav) {
 			nav.classList.add("ghcn-nav");
 			let indx, els,
@@ -811,60 +812,6 @@
 				updatePanel();
 			}
 		}
-	}
-
-	function $(selector, el) {
-		return (el || document).querySelector(selector);
-	}
-
-	function $$(selector, el) {
-		return [...(el || document).querySelectorAll(selector)];
-	}
-
-	function addClass(els, name) {
-		let indx = els.length;
-		while (indx--) {
-			els[indx].classList.add(name);
-		}
-	}
-
-	function removeClass(els, name) {
-		let indx = els.length;
-		while (indx--) {
-			els[indx].classList.remove(name);
-		}
-	}
-
-	function on(els, name, callback) {
-		els = Array.isArray(els) ? els : [els];
-		let events = name.split(/\s+/);
-		els.forEach(el => {
-			events.forEach(ev => {
-				el.addEventListener(ev, callback);
-			});
-		});
-	}
-
-	function make(obj) {
-		let key,
-			el = document.createElement(obj.el);
-		if (obj.cl4ss) {
-			el.className = obj.cl4ss;
-		}
-		if (obj.html) {
-			el.innerHTML = obj.html;
-		}
-		if (obj.attr) {
-			for (key in obj.attr) {
-				if (obj.attr?.[key]) {
-					el.setAttribute(key, obj.attr[key]);
-				}
-			}
-		}
-		if (obj.appendTo) {
-			$(obj.appendTo).appendChild(el);
-		}
-		return el;
 	}
 
 	let isValid = checkJSON(settings, "init");
